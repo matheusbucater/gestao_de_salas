@@ -195,203 +195,217 @@
         <article role="main">
           <section id="codigo-completo">
 <h1>Código Completo<a class="headerlink" href="#codigo-completo" title="Link permanente para este cabeçalho">#</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span>-- TRABALHO FINAL DE BANCO DE DADOS
-<span class="linenos">  2</span>-- MATHEUS PELEGRINI BUCATER
-<span class="linenos">  3</span>-- 11921ECP002
-<span class="linenos">  4</span>
-<span class="linenos">  5</span>-- Criação do Banco de Dados
-<span class="linenos">  6</span>create database gs;
-<span class="linenos">  7</span>
-<span class="linenos">  8</span>-- Criação do Schema
-<span class="linenos">  9</span>create schema matriz;
-<span class="linenos"> 10</span>
-<span class="linenos"> 11</span>-- Criação das Tabelas
-<span class="linenos"> 12</span>create table matriz.tb_professor (
-<span class="linenos"> 13</span>	id_professor integer,
-<span class="linenos"> 14</span>	nome varchar(50) constraint nn_nome not null,
-<span class="linenos"> 15</span>	instituto_faculdade varchar(50) constraint nn_inst_facul not null,
-<span class="linenos"> 16</span>	constraint pk_id_professor primary key (id_professor)
-<span class="linenos"> 17</span>);
-<span class="linenos"> 18</span>
-<span class="linenos"> 19</span>create table matriz.tb_sala (
-<span class="linenos"> 20</span>	id_sala integer,
-<span class="linenos"> 21</span>	bloco varchar(2) constraint nn_bloco not null,
-<span class="linenos"> 22</span>	capacidade_max integer constraint nn_capacidade_max not null,
-<span class="linenos"> 23</span>	tem_projetor boolean constraint nn_tem_projetor not null,
-<span class="linenos"> 24</span>	constraint pk_id_sala primary key (id_sala)
-<span class="linenos"> 25</span>);
-<span class="linenos"> 26</span>
-<span class="linenos"> 27</span>create table matriz.tb_disciplina (
-<span class="linenos"> 28</span>	id_disciplina integer,
-<span class="linenos"> 29</span>	id_professor integer constraint nn_id_professor not null,
-<span class="linenos"> 30</span>	nome varchar(50) constraint nn_nome not null,
-<span class="linenos"> 31</span>	ch integer constraint nn_ch not null,
-<span class="linenos"> 32</span>	constraint pk_id_disciplina primary key (id_disciplina),
-<span class="linenos"> 33</span>	constraint fk_dis_id_professor foreign key (id_professor) references matriz.tb_professor (id_professor)
-<span class="linenos"> 34</span>);
-<span class="linenos"> 35</span>
-<span class="linenos"> 36</span>create table matriz.tb_agendamento (
-<span class="linenos"> 37</span>	id_agendamento integer,
-<span class="linenos"> 38</span>	id_sala integer constraint nn_id_sala not null,
-<span class="linenos"> 39</span>	id_disciplina integer constraint nn_id_disciplina not null,
-<span class="linenos"> 40</span>	horario timestamp constraint nn_horario not null,
-<span class="linenos"> 41</span>	constraint pk_id_agendamento primary key (id_agendamento),
-<span class="linenos"> 42</span>	constraint fk_dis_id_sala foreign key (id_sala) references matriz.tb_sala (id_sala),
-<span class="linenos"> 43</span>	constraint fk_dis_id_disciplina foreign key (id_disciplina) references matriz.tb_disciplina (id_disciplina)
-<span class="linenos"> 44</span>);
-<span class="linenos"> 45</span>
-<span class="linenos"> 46</span>-- Criação das Tabelas Temporárias
-<span class="linenos"> 47</span>create table tb_sala_auditoria (
-<span class="linenos"> 48</span>	operacao char not null,
-<span class="linenos"> 49</span>	usuario varchar not null,
-<span class="linenos"> 50</span>	dt_hr timestamp not null,
-<span class="linenos"> 51</span>	id_sala integer,
-<span class="linenos"> 52</span>	bloco varchar(2) constraint nn_bloco not null,
-<span class="linenos"> 53</span>	capacidade_max integer constraint nn_capacidade_max not null,
-<span class="linenos"> 54</span>	tem_projetor boolean constraint nn_tem_projetor not null
-<span class="linenos"> 55</span>);
-<span class="linenos"> 56</span>
-<span class="linenos"> 57</span>create table tb_professor_auditoria (
-<span class="linenos"> 58</span>	operacao char not null,
-<span class="linenos"> 59</span>	usuario varchar not null,
-<span class="linenos"> 60</span>	dt_hr timestamp not null,
-<span class="linenos"> 61</span>	id_professor integer,
-<span class="linenos"> 62</span>	nome varchar(50) constraint nn_nome not null,
-<span class="linenos"> 63</span>	instituto_faculdade varchar(50) constraint nn_inst_facul not null
-<span class="linenos"> 64</span>);
-<span class="linenos"> 65</span>
-<span class="linenos"> 66</span>create table tb_disciplina_auditoria (
-<span class="linenos"> 67</span>	operacao char not null,
-<span class="linenos"> 68</span>	usuario varchar not null,
-<span class="linenos"> 69</span>	dt_hr timestamp not null,
-<span class="linenos"> 70</span>	id_disciplina integer,
-<span class="linenos"> 71</span>	id_professor integer constraint nn_id_professor not null,
-<span class="linenos"> 72</span>	nome varchar(50) constraint nn_nome not null,
-<span class="linenos"> 73</span>	ch integer constraint nn_ch not null
-<span class="linenos"> 74</span>);
-<span class="linenos"> 75</span>
-<span class="linenos"> 76</span>create table tb_agendamento_auditoria (
-<span class="linenos"> 77</span>	operacao char not null,
-<span class="linenos"> 78</span>	usuario varchar not null,
-<span class="linenos"> 79</span>	dt_hr timestamp not null,
-<span class="linenos"> 80</span>	id_agendamento integer,
-<span class="linenos"> 81</span>	id_sala integer constraint nn_id_sala not null,
-<span class="linenos"> 82</span>	id_disciplina integer constraint nn_id_disciplina not null,
-<span class="linenos"> 83</span>	horario timestamp constraint nn_horario not null
-<span class="linenos"> 84</span>);
-<span class="linenos"> 85</span>
-<span class="linenos"> 86</span>-- Criação das Triggers
-<span class="linenos"> 87</span>CREATE OR REPLACE FUNCTION matriz.fn_sala_auditoria()
-<span class="linenos"> 88</span>RETURNS trigger AS
-<span class="linenos"> 89</span>$$
-<span class="linenos"> 90</span>	BEGIN
-<span class="linenos"> 91</span>    	IF(tg_op = &#39;DELETE&#39;) THEN
-<span class="linenos"> 92</span>           	INSERT INTO tb_sala_auditoria
-<span class="linenos"> 93</span>            SELECT &#39;E&#39;, user, now(),OLD.*;
-<span class="linenos"> 94</span>            RETURN OLD;
-<span class="linenos"> 95</span>    	ELSIF(tg_op = &#39;UPDATE&#39;) THEN
-<span class="linenos"> 96</span>           	INSERT INTO tb_sala_auditoria
-<span class="linenos"> 97</span>            SELECT &#39;A&#39;, user, now(),OLD.*;
-<span class="linenos"> 98</span>           	INSERT INTO tb_sala_auditoria
-<span class="linenos"> 99</span>            SELECT &#39;A&#39;, user, now(),NEW.*;
-<span class="linenos">100</span>            RETURN NEW;
-<span class="linenos">101</span>    	ELSIF(tg_op = &#39;INSERT&#39;) THEN
-<span class="linenos">102</span>           	INSERT INTO tb_sala_auditoria
-<span class="linenos">103</span>            SELECT &#39;I&#39;, user, now(),NEW.*;
-<span class="linenos">104</span>            RETURN NEW;
-<span class="linenos">105</span>        END IF;
-<span class="linenos">106</span>        RETURN NULL;                   
-<span class="linenos">107</span>    END
-<span class="linenos">108</span>$$
-<span class="linenos">109</span>LANGUAGE plpgsql;
-<span class="linenos">110</span>
-<span class="linenos">111</span>create trigger tg_sala_auditoria
-<span class="linenos">112</span>after insert or update or delete on matriz.tb_sala 
-<span class="linenos">113</span>for each row execute procedure matriz.fn_sala_auditoria();
-<span class="linenos">114</span>
-<span class="linenos">115</span>CREATE OR REPLACE FUNCTION matriz.fn_professor_auditoria()
-<span class="linenos">116</span>RETURNS trigger AS
-<span class="linenos">117</span>$$
-<span class="linenos">118</span>	BEGIN
-<span class="linenos">119</span>    	IF(tg_op = &#39;DELETE&#39;) THEN
-<span class="linenos">120</span>           	INSERT INTO tb_professor_auditoria
-<span class="linenos">121</span>            SELECT &#39;E&#39;, user, now(),OLD.*;
-<span class="linenos">122</span>            RETURN OLD;
-<span class="linenos">123</span>    	ELSIF(tg_op = &#39;UPDATE&#39;) THEN
-<span class="linenos">124</span>           	INSERT INTO tb_professor_auditoria
-<span class="linenos">125</span>            SELECT &#39;A&#39;, user, now(),OLD.*;
-<span class="linenos">126</span>           	INSERT INTO tb_professor_auditoria
-<span class="linenos">127</span>            SELECT &#39;A&#39;, user, now(),NEW.*;
-<span class="linenos">128</span>            RETURN NEW;
-<span class="linenos">129</span>    	ELSIF(tg_op = &#39;INSERT&#39;) THEN
-<span class="linenos">130</span>           	INSERT INTO tb_professor_auditoria
-<span class="linenos">131</span>            SELECT &#39;I&#39;, user, now(),NEW.*;
-<span class="linenos">132</span>            RETURN NEW;
-<span class="linenos">133</span>        END IF;
-<span class="linenos">134</span>        RETURN NULL;                   
-<span class="linenos">135</span>    END
-<span class="linenos">136</span>$$
-<span class="linenos">137</span>LANGUAGE plpgsql;
-<span class="linenos">138</span>
-<span class="linenos">139</span>create trigger tg_professor_auditoria
-<span class="linenos">140</span>after insert or update or delete on matriz.tb_professor 
-<span class="linenos">141</span>for each row execute procedure matriz.fn_professor_auditoria();
-<span class="linenos">142</span>
-<span class="linenos">143</span>CREATE OR REPLACE FUNCTION matriz.fn_disciplina_auditoria()
-<span class="linenos">144</span>RETURNS trigger AS
-<span class="linenos">145</span>$$
-<span class="linenos">146</span>	BEGIN
-<span class="linenos">147</span>    	IF(tg_op = &#39;DELETE&#39;) THEN
-<span class="linenos">148</span>           	INSERT INTO tb_disciplina_auditoria
-<span class="linenos">149</span>            SELECT &#39;E&#39;, user, now(),OLD.*;
-<span class="linenos">150</span>            RETURN OLD;
-<span class="linenos">151</span>    	ELSIF(tg_op = &#39;UPDATE&#39;) THEN
-<span class="linenos">152</span>           	INSERT INTO tb_disciplina_auditoria
-<span class="linenos">153</span>            SELECT &#39;A&#39;, user, now(),OLD.*;
-<span class="linenos">154</span>           	INSERT INTO tb_disciplina_auditoria
-<span class="linenos">155</span>            SELECT &#39;A&#39;, user, now(),NEW.*;
-<span class="linenos">156</span>            RETURN NEW;
-<span class="linenos">157</span>    	ELSIF(tg_op = &#39;INSERT&#39;) THEN
-<span class="linenos">158</span>           	INSERT INTO tb_discplina_auditoria
-<span class="linenos">159</span>            SELECT &#39;I&#39;, user, now(),NEW.*;
-<span class="linenos">160</span>            RETURN NEW;
-<span class="linenos">161</span>        END IF;
-<span class="linenos">162</span>        RETURN NULL;                   
-<span class="linenos">163</span>    END
-<span class="linenos">164</span>$$
-<span class="linenos">165</span>LANGUAGE plpgsql;
-<span class="linenos">166</span>
-<span class="linenos">167</span>create trigger tg_disciplina_auditoria
-<span class="linenos">168</span>after insert or update or delete on matriz.tb_disciplina
-<span class="linenos">169</span>for each row execute procedure matriz.fn_disciplina_auditoria();
-<span class="linenos">170</span>
-<span class="linenos">171</span>CREATE OR REPLACE FUNCTION matriz.fn_agendamento_auditoria()
-<span class="linenos">172</span>RETURNS trigger AS
-<span class="linenos">173</span>$$
-<span class="linenos">174</span>	BEGIN
-<span class="linenos">175</span>    	IF(tg_op = &#39;DELETE&#39;) THEN
-<span class="linenos">176</span>           	INSERT INTO tb_agendamento_auditoria
-<span class="linenos">177</span>            SELECT &#39;E&#39;, user, now(),OLD.*;
-<span class="linenos">178</span>            RETURN OLD;
-<span class="linenos">179</span>    	ELSIF(tg_op = &#39;UPDATE&#39;) THEN
-<span class="linenos">180</span>           	INSERT INTO tb_agendamento_auditoria
-<span class="linenos">181</span>            SELECT &#39;A&#39;, user, now(),OLD.*;
-<span class="linenos">182</span>           	INSERT INTO tb_agendamento_auditoria
-<span class="linenos">183</span>            SELECT &#39;A&#39;, user, now(),NEW.*;
-<span class="linenos">184</span>            RETURN NEW;
-<span class="linenos">185</span>    	ELSIF(tg_op = &#39;INSERT&#39;) THEN
-<span class="linenos">186</span>           	INSERT INTO tb_agendamento_auditoria
-<span class="linenos">187</span>            SELECT &#39;I&#39;, user, now(),NEW.*;
-<span class="linenos">188</span>            RETURN NEW;
-<span class="linenos">189</span>        END IF;
-<span class="linenos">190</span>        RETURN NULL;                   
-<span class="linenos">191</span>    END
-<span class="linenos">192</span>$$
-<span class="linenos">193</span>LANGUAGE plpgsql;
-<span class="linenos">194</span>
-<span class="linenos">195</span>create trigger tg_agendamento_auditoria
-<span class="linenos">196</span>after insert or update or delete on matriz.tb_agendamento  
-<span class="linenos">197</span>for each row execute procedure matriz.fn_agendamento_auditoria();
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>Os códigos de criação das funções de auditoria não estão carregando
+o syntax highlight. Apenas as criações das triggers em si estão
+coloridos de acordo.</p>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- TRABALHO FINAL DE BANCO DE DADOS</span>
+<span class="linenos"> 2</span><span class="c1">-- MATHEUS PELEGRINI BUCATER</span>
+<span class="linenos"> 3</span><span class="c1">-- 11921ECP002</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1">-- Criação do Banco de Dados</span>
+<span class="linenos"> 6</span><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">gs</span><span class="p">;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1">-- Criação do Schema</span>
+<span class="linenos"> 9</span><span class="k">create</span><span class="w"> </span><span class="k">schema</span><span class="w"> </span><span class="n">matriz</span><span class="p">;</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1">-- Criação das Tabelas</span>
+<span class="linenos">12</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_professor</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">13</span><span class="w">     </span><span class="n">id_professor</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">14</span><span class="w">     </span><span class="n">nome</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_nome</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">15</span><span class="w">     </span><span class="n">instituto_faculdade</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_inst_facul</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">16</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">pk_id_professor</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_professor</span><span class="p">)</span>
+<span class="linenos">17</span><span class="p">);</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_sala</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">20</span><span class="w">     </span><span class="n">id_sala</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">21</span><span class="w">     </span><span class="n">bloco</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_bloco</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">22</span><span class="w">     </span><span class="n">capacidade_max</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_capacidade_max</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">23</span><span class="w">     </span><span class="n">tem_projetor</span><span class="w"> </span><span class="nb">boolean</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_tem_projetor</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">24</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">pk_id_sala</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_sala</span><span class="p">)</span>
+<span class="linenos">25</span><span class="p">);</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_disciplina</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">28</span><span class="w">     </span><span class="n">id_disciplina</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">29</span><span class="w">     </span><span class="n">id_professor</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_professor</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">30</span><span class="w">     </span><span class="n">nome</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_nome</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">31</span><span class="w">     </span><span class="n">ch</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_ch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">32</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">pk_id_disciplina</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_disciplina</span><span class="p">),</span>
+<span class="linenos">33</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">fk_dis_id_professor</span><span class="w"> </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_professor</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_professor</span><span class="w"> </span><span class="p">(</span><span class="n">id_professor</span><span class="p">)</span>
+<span class="linenos">34</span><span class="p">);</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_agendamento</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">37</span><span class="w">     </span><span class="n">id_agendamento</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">38</span><span class="w">     </span><span class="n">id_sala</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_sala</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">39</span><span class="w">     </span><span class="n">id_disciplina</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_disciplina</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">40</span><span class="w">     </span><span class="n">horario</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_horario</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">41</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">pk_id_agendamento</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_agendamento</span><span class="p">),</span>
+<span class="linenos">42</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">fk_dis_id_sala</span><span class="w"> </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_sala</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_sala</span><span class="w"> </span><span class="p">(</span><span class="n">id_sala</span><span class="p">),</span>
+<span class="linenos">43</span><span class="w">     </span><span class="k">constraint</span><span class="w"> </span><span class="n">fk_dis_id_disciplina</span><span class="w"> </span><span class="k">foreign</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="p">(</span><span class="n">id_disciplina</span><span class="p">)</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_disciplina</span><span class="w"> </span><span class="p">(</span><span class="n">id_disciplina</span><span class="p">)</span>
+<span class="linenos">44</span><span class="p">);</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="c1">-- Criação das Tabelas Temporárias</span>
+<span class="linenos">47</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tb_sala_auditoria</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">48</span><span class="w">     </span><span class="n">operacao</span><span class="w"> </span><span class="nb">char</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">49</span><span class="w">     </span><span class="n">usuario</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">50</span><span class="w">     </span><span class="n">dt_hr</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">51</span><span class="w">     </span><span class="n">id_sala</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">52</span><span class="w">     </span><span class="n">bloco</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_bloco</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">53</span><span class="w">     </span><span class="n">capacidade_max</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_capacidade_max</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">54</span><span class="w">     </span><span class="n">tem_projetor</span><span class="w"> </span><span class="nb">boolean</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_tem_projetor</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span>
+<span class="linenos">55</span><span class="p">);</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tb_professor_auditoria</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">58</span><span class="w">     </span><span class="n">operacao</span><span class="w"> </span><span class="nb">char</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">59</span><span class="w">     </span><span class="n">usuario</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">60</span><span class="w">     </span><span class="n">dt_hr</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">61</span><span class="w">     </span><span class="n">id_professor</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">62</span><span class="w">     </span><span class="n">nome</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_nome</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">63</span><span class="w">     </span><span class="n">instituto_faculdade</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_inst_facul</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span>
+<span class="linenos">64</span><span class="p">);</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tb_disciplina_auditoria</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">67</span><span class="w">     </span><span class="n">operacao</span><span class="w"> </span><span class="nb">char</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">68</span><span class="w">     </span><span class="n">usuario</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">69</span><span class="w">     </span><span class="n">dt_hr</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">70</span><span class="w">     </span><span class="n">id_disciplina</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">71</span><span class="w">     </span><span class="n">id_professor</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_professor</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">72</span><span class="w">     </span><span class="n">nome</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_nome</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">73</span><span class="w">     </span><span class="n">ch</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_ch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span>
+<span class="linenos">74</span><span class="p">);</span>
+<span class="linenos">75</span>
+<span class="linenos">76</span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tb_agendamento_auditoria</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">77</span><span class="w">     </span><span class="n">operacao</span><span class="w"> </span><span class="nb">char</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">78</span><span class="w">     </span><span class="n">usuario</span><span class="w"> </span><span class="nb">varchar</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">79</span><span class="w">     </span><span class="n">dt_hr</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">80</span><span class="w">     </span><span class="n">id_agendamento</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span>
+<span class="linenos">81</span><span class="w">     </span><span class="n">id_sala</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_sala</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">82</span><span class="w">     </span><span class="n">id_disciplina</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_id_disciplina</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="linenos">83</span><span class="w">     </span><span class="n">horario</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">constraint</span><span class="w"> </span><span class="n">nn_horario</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span>
+<span class="linenos">84</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>-- Criação das Triggers
+<span class="linenos"> 2</span>CREATE OR REPLACE FUNCTION matriz.fn_sala_auditoria()
+<span class="linenos"> 3</span>RETURNS trigger AS
+<span class="linenos"> 4</span>$$
+<span class="linenos"> 5</span>       BEGIN
+<span class="linenos"> 6</span>      IF(tg_op = &#39;DELETE&#39;) THEN
+<span class="linenos"> 7</span>         INSERT INTO tb_sala_auditoria
+<span class="linenos"> 8</span>         SELECT &#39;E&#39;, user, now(),OLD.*;
+<span class="linenos"> 9</span>         RETURN OLD;
+<span class="linenos">10</span>      ELSIF(tg_op = &#39;UPDATE&#39;) THEN
+<span class="linenos">11</span>         INSERT INTO tb_sala_auditoria
+<span class="linenos">12</span>         SELECT &#39;A&#39;, user, now(),OLD.*;
+<span class="linenos">13</span>         INSERT INTO tb_sala_auditoria
+<span class="linenos">14</span>         SELECT &#39;A&#39;, user, now(),NEW.*;
+<span class="linenos">15</span>         RETURN NEW;
+<span class="linenos">16</span>      ELSIF(tg_op = &#39;INSERT&#39;) THEN
+<span class="linenos">17</span>         INSERT INTO tb_sala_auditoria
+<span class="linenos">18</span>         SELECT &#39;I&#39;, user, now(),NEW.*;
+<span class="linenos">19</span>         RETURN NEW;
+<span class="linenos">20</span>      END IF;
+<span class="linenos">21</span>      RETURN NULL;
+<span class="linenos">22</span>   END
+<span class="linenos">23</span>$$
+<span class="linenos">24</span>LANGUAGE plpgsql;
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tg_sala_auditoria</span>
+<span class="linenos">2</span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_sala</span>
+<span class="linenos">3</span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">fn_sala_auditoria</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>CREATE OR REPLACE FUNCTION matriz.fn_professor_auditoria()
+<span class="linenos"> 2</span>RETURNS trigger AS
+<span class="linenos"> 3</span>$$
+<span class="linenos"> 4</span>       BEGIN
+<span class="linenos"> 5</span>      IF(tg_op = &#39;DELETE&#39;) THEN
+<span class="linenos"> 6</span>         INSERT INTO tb_professor_auditoria
+<span class="linenos"> 7</span>         SELECT &#39;E&#39;, user, now(),OLD.*;
+<span class="linenos"> 8</span>         RETURN OLD;
+<span class="linenos"> 9</span>      ELSIF(tg_op = &#39;UPDATE&#39;) THEN
+<span class="linenos">10</span>         INSERT INTO tb_professor_auditoria
+<span class="linenos">11</span>         SELECT &#39;A&#39;, user, now(),OLD.*;
+<span class="linenos">12</span>         INSERT INTO tb_professor_auditoria
+<span class="linenos">13</span>         SELECT &#39;A&#39;, user, now(),NEW.*;
+<span class="linenos">14</span>         RETURN NEW;
+<span class="linenos">15</span>      ELSIF(tg_op = &#39;INSERT&#39;) THEN
+<span class="linenos">16</span>         INSERT INTO tb_professor_auditoria
+<span class="linenos">17</span>         SELECT &#39;I&#39;, user, now(),NEW.*;
+<span class="linenos">18</span>         RETURN NEW;
+<span class="linenos">19</span>      END IF;
+<span class="linenos">20</span>      RETURN NULL;
+<span class="linenos">21</span>   END
+<span class="linenos">22</span>$$
+<span class="linenos">23</span>LANGUAGE plpgsql;
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tg_professor_auditoria</span>
+<span class="linenos">2</span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_professor</span>
+<span class="linenos">3</span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">fn_professor_auditoria</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>CREATE OR REPLACE FUNCTION matriz.fn_disciplina_auditoria()
+<span class="linenos"> 2</span>RETURNS trigger AS
+<span class="linenos"> 3</span>$$
+<span class="linenos"> 4</span>   BEGIN
+<span class="linenos"> 5</span>      IF(tg_op = &#39;DELETE&#39;) THEN
+<span class="linenos"> 6</span>         INSERT INTO tb_disciplina_auditoria
+<span class="linenos"> 7</span>         SELECT &#39;E&#39;, user, now(),OLD.*;
+<span class="linenos"> 8</span>         RETURN OLD;
+<span class="linenos"> 9</span>      ELSIF(tg_op = &#39;UPDATE&#39;) THEN
+<span class="linenos">10</span>         INSERT INTO tb_disciplina_auditoria
+<span class="linenos">11</span>         SELECT &#39;A&#39;, user, now(),OLD.*;
+<span class="linenos">12</span>         INSERT INTO tb_disciplina_auditoria
+<span class="linenos">13</span>         SELECT &#39;A&#39;, user, now(),NEW.*;
+<span class="linenos">14</span>         RETURN NEW;
+<span class="linenos">15</span>      ELSIF(tg_op = &#39;INSERT&#39;) THEN
+<span class="linenos">16</span>         INSERT INTO tb_discplina_auditoria
+<span class="linenos">17</span>         SELECT &#39;I&#39;, user, now(),NEW.*;
+<span class="linenos">18</span>         RETURN NEW;
+<span class="linenos">19</span>      END IF;
+<span class="linenos">20</span>      RETURN NULL;
+<span class="linenos">21</span>   END
+<span class="linenos">22</span>$$
+<span class="linenos">23</span>LANGUAGE plpgsql;
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tg_disciplina_auditoria</span>
+<span class="linenos">2</span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_disciplina</span>
+<span class="linenos">3</span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">fn_disciplina_auditoria</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>CREATE OR REPLACE FUNCTION matriz.fn_agendamento_auditoria()
+<span class="linenos"> 2</span>RETURNS trigger AS
+<span class="linenos"> 3</span>$$
+<span class="linenos"> 4</span>       BEGIN
+<span class="linenos"> 5</span>      IF(tg_op = &#39;DELETE&#39;) THEN
+<span class="linenos"> 6</span>         INSERT INTO tb_agendamento_auditoria
+<span class="linenos"> 7</span>         SELECT &#39;E&#39;, user, now(),OLD.*;
+<span class="linenos"> 8</span>         RETURN OLD;
+<span class="linenos"> 9</span>      ELSIF(tg_op = &#39;UPDATE&#39;) THEN
+<span class="linenos">10</span>         INSERT INTO tb_agendamento_auditoria
+<span class="linenos">11</span>         SELECT &#39;A&#39;, user, now(),OLD.*;
+<span class="linenos">12</span>         INSERT INTO tb_agendamento_auditoria
+<span class="linenos">13</span>         SELECT &#39;A&#39;, user, now(),NEW.*;
+<span class="linenos">14</span>         RETURN NEW;
+<span class="linenos">15</span>      ELSIF(tg_op = &#39;INSERT&#39;) THEN
+<span class="linenos">16</span>         INSERT INTO tb_agendamento_auditoria
+<span class="linenos">17</span>         SELECT &#39;I&#39;, user, now(),NEW.*;
+<span class="linenos">18</span>         RETURN NEW;
+<span class="linenos">19</span>      END IF;
+<span class="linenos">20</span>      RETURN NULL;
+<span class="linenos">21</span>   END
+<span class="linenos">22</span>$$
+<span class="linenos">23</span>LANGUAGE plpgsql;
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tg_agendamento_auditoria</span>
+<span class="linenos">2</span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">tb_agendamento</span>
+<span class="linenos">3</span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="k">procedure</span><span class="w"> </span><span class="n">matriz</span><span class="p">.</span><span class="n">fn_agendamento_auditoria</span><span class="p">();</span>
 </pre></div>
 </div>
 </section>

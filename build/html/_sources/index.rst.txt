@@ -12,8 +12,8 @@ Trabalho Final para a disciplina de Banco de Dados.
    :widths: 100 800
    :header-rows: 0
 
-   * - *Docente*
-     - **Marcio Cunha**
+   * - **Docente**
+     - **Márcio Cunha**
    * - Discente
      - Matheus Bucater
    * - Matrícula
