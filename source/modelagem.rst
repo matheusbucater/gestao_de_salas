@@ -84,7 +84,7 @@ um idenficador (``id_agendamento``), o idenficador da sala agendada
      - timestamp
 .. note::
    
-   EDR feito no site `dbdiagram.io <https://dbdiagram.io/>`_.
+   DER feito no site `dbdiagram.io <https://dbdiagram.io/>`_.
 
    .. image:: img/gs_der.png
       :width: 800
